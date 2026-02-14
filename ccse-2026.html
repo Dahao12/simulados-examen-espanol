@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado CCSE 2026 - EXAMEN INTERACTIVO BILINGÜE</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .info-box strong {
+            font-size: 18px;
+        }
+
+        .timer {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .timer.running {
+            display: block;
+        }
+
+        .question-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .question-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .spanish-text {
+            color: #667eea;
+            margin-left: 10px;
+        }
+
+        .options {
+            margin: 15px 0;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-label:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .option-label.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .option-label.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .section-title {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 30px 0;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            display: none;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            animation: fadeIn 0.5s;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .score.aptado {
+            color: #28a745;
+        }
+
+        .score.no-aptado {
+            color: #dc3545;
+        }
+
+        .result-message {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .aptado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .no-aptado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .restart-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇪🇸 SIMULADO CCSE 2026 - BILINGÜE (PT/ES)</h1>
+
+        <div class="info-box">
+            <p><strong>⏱️ TIEMPO: 45 minutos</strong></p>
+            <p><strong>📝 PREGUNTAS: 25</strong></p>
+            <p><strong>✅ APROBACIÓN: 15/25 (60%)</strong></p>
+            <p><strong>🌍 PORTUGUÊS + ESPAÑOL (bilingue)</strong></p>
+        </div>
+
+        <div class="timer" id="timer">⏰ 45:00</div>
+
+        <button class="submit-btn" onclick="startExam()" id="startBtn">🚀 COMENZAR EXAMEN</button>
+
+        <div id="questions-container" style="display: none;">
+            <div class="section-title">📚 PARTE 1: GOBIERNO, LEY Y PARTICIPACIÓN CIUDADANA (60%)</div>
+
+            <div id="part1-questions"></div>
+
+            <div class="section-title">🎭 PARTE 2: CULTURA, HISTORIA Y SOCIEDAD ESPAÑOLA (40%)</div>
+
+            <div id="part2-questions"></div>
+
+            <button class="submit-btn" onclick="showResults()">✅ ENVIAR RESPUESTAS</button>
+        </div>
+
+        <div class="results" id="results">
+            <h2>📊 RESULTADO DO EXAMEN</h2>
+            <div class="score" id="scoreText">0/25</div>
+            <div class="result-message" id="resultMessage"></div>
+            <div style="text-align: center; margin: 20px 0;">
+                <p><strong>Respuestas correctas:</strong> <span id="correctCount">0</span>/25</p>
+                <p><strong>Porcentaje:</strong> <span id="percentage">0</span>%</p>
+            </div>
+            <button class="restart-btn" onclick="restartExam()">🔄 REINICIAR EXAMEN</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                questionPt: "Quantos artigos possui a Constituição Espanhola de 1978?",
+                questionEs: "¿Cuántos artículos tiene la Constitución española de 1978?",
+                options: [
+                    {pt: "A) 150 artigos", es: "A) 150 artículos"},
+                    {pt: "B) 169 artigos", es: "B) 169 artículos"},
+                    {pt: "C) 180 artigos", es: "C) 180 artículos"},
+                    {pt: "D) 199 artigos", es: "D) 199 artículos"}
+                ],
+                correct: 1
+            },
+            {
+                id: 2,
+                questionPt: "Qual é a forma de governo da Espanha?",
+                questionEs: "¿Cuál es la forma de gobierno de España?",
+                options: [
+                    {pt: "A) República", es: "A) República"},
+                    {pt: "B) Monarquia parlamentar", es: "B) Monarquía parlamentar"},
+                    {pt: "C) Monarquia absoluta", es: "C) Monarquía absoluta"},
+                    {pt: "D) Ditadura militar", es: "D) Dictadura militar"}
+                ],
+                correct: 1
+            },
+            {
+                id: 3,
+                questionPt: "Quem é o Chefe de Estado na Espanha?",
+                questionEs: "¿Quién es el Jefe del Estado en España?",
+                options: [
+                    {pt: "A) O Presidente do Governo", es: "A) El Presidente del Gobierno"},
+                    {pt: "B) O Rei", es: "B) El Rey"},
+                    {pt: "C) O Presidente do Congresso", es: "C) El Presidente del Congreso"},
+                    {pt: "D) O Presidente do Senado", es: "D) El Presidente del Senado"}
+                ],
+                correct: 1
+            },
+            {
+                id: 4,
+                questionPt: "O que significa a 'autonomia' no sistema espanhol?",
+                questionEs: "¿Qué significa la 'autonomía' en el sistema español?",
+                options: [
+                    {pt: "A) Independência total das regiões", es: "A) Independencia total de las regiones"},
+                    {pt: "B) Capacidade de autogoverno das Comunidades Autónomas", es: "B) Capacidad de autogobierno de las Comunidades Autónomas"},
+                    {pt: "C) Submissão ao governo central", es: "C) Sumisión al gobierno central"},
+                    {pt: "D) Sistema federal estrito", es: "D) Sistema federal estricto"}
+                ],
+                correct: 1
+            },
+            {
+                id: 5,
+                questionPt: "Qual é o nome do Parlamento espanhol?",
+                questionEs: "¿Cuál es el nombre del Parlamento español?",
+                options: [
+                    {pt: "A) Assembleia Nacional", es: "A) Asamblea Nacional"},
+                    {pt: "B) Cortes Gerais", es: "B) Cortes Generales"},
+                    {pt: "C) Congresso Nacional", es: "C) Congreso Nacional"},
+                    {pt: "D) Parlamento Federal", es: "D) Parlamento Federal"}
+                ],
+                correct: 1
+            },
+            {
+                id: 6,
+                questionPt: "Quantas Comunidades Autónomas existem na Espanha?",
+                questionEs: "¿Cuántas Comunidades Autónomas existen en España?",
+                options: [
+                    {pt: "A) 15", es: "A) 15"},
+                    {pt: "B) 17", es: "B) 17"},
+                    {pt: "C) 19", es: "C) 19"},
+                    {pt: "D) 22", es: "D) 22"}
+                ],
+                correct: 1
+            },
+            {
+                id: 7,
+                questionPt: "O que é o 'Tribunal Constitucional'?",
+                questionEs: "¿Qué es el 'Tribunal Constitucional'?",
+                options: [
+                    {pt: "A) O tribunal máximo de toda a Espanha", es: "A) El tribunal máximo de toda España"},
+                    {pt: "B) O tribunal que interpreta a Constituição", es: "B) El tribunal que interpreta la Constitución"},
+                    {pt: "C) O tribunal militar", es: "C) El tribunal militar"},
+                    {pt: "D) O tribunal internacional", es: "D) El tribunal internacional"}
+                ],
+                correct: 1
+            },
+            {
+                id: 8,
+                questionPt: "Qual é a idade mínima para votar na Espanha?",
+                questionEs: "¿Cuál es la edad mínima para votar en España?",
+                options: [
+                    {pt: "A) 16 anos", es: "A) 16 años"},
+                    {pt: "B) 17 anos", es: "B) 17 años"},
+                    {pt: "C) 18 anos", es: "C) 18 años"},
+                    {pt: "D) 21 anos", es: "D) 21 años"}
+                ],
+                correct: 2
+            },
+            {
+                id: 9,
+                questionPt: "O que são as 'eleições gerais'?",
+                questionEs: "¿Qué son las 'elecciones generales'?",
+                options: [
+                    {pt: "A) Eleições municipais", es: "A) Elecciones municipales"},
+                    {pt: "B) Eleições para o Parlamento Europeu", es: "B) Elecciones para el Parlamento Europeo"},
+                    {pt: "C) Eleições para o Congresso dos Deputados e Senado", es: "C) Elecciones para el Congreso de los Diputados y Senado"},
+                    {pt: "D) Eleições autonómicas", es: "D) Elecciones autonómicas"}
+                ],
+                correct: 2
+            },
+            {
+                id: 10,
+                questionPt: "Como se denomina o sistema político espanhol?",
+                questionEs: "¿Cómo se denomina el sistema político español?",
+                options: [
+                    {pt: "A) Monarquia absoluta", es: "A) Monarquía absoluta"},
+                    {pt: "B) República socialista", es: "B) República socialista"},
+                    {pt: "C) Monarquia parlamentar", es: "C) Monarquía parlamentar"},
+                    {pt: "D) Ditadura militar", es: "D) Dictadura militar"}
+                ],
+                correct: 2
+            },
+            {
+                id: 11,
+                questionPt: "Qual é a capital da Espanha?",
+                questionEs: "¿Cuál es la capital de España?",
+                options: [
+                    {pt: "A) Barcelona", es: "A) Barcelona"},
+                    {pt: "B) Madrid", es: "B) Madrid"},
+                    {pt: "C) Sevilha", es: "C) Sevilla"},
+                    {pt: "D) Valência", es: "D) Valencia"}
+                ],
+                correct: 1
+            },
+            {
+                id: 12,
+                questionPt: "O que significa 'Estado de Direito'?",
+                questionEs: "¿Qué significa 'Estado de Derecho'?",
+                options: [
+                    {pt: "A) Governo sem leis", es: "A) Gobierno sin leyes"},
+                    {pt: "B) Todos, incluindo o governo, estão submetidos à lei", es: "B) Todos, incluido el gobierno, están sometidos a la ley"},
+                    {pt: "C) Somente os cidadãos devem obedecer às leis", es: "C) Sólo los ciudadanos deben obedecer las leyes"},
+                    {pt: "D) As leis mudam constantemente", es: "D) Las leyes cambian constantemente"}
+                ],
+                correct: 1
+            },
+            {
+                id: 13,
+                questionPt: "Quem pode propor uma lei?",
+                questionEs: "¿Quién puede proponer una ley?",
+                options: [
+                    {pt: "A) Somente o Governo", es: "A) Sólo el Gobierno"},
+                    {pt: "B) Somente o Parlamento", es: "B) Sólo el Parlamento"},
+                    {pt: "C) Governo, deputados ou senadores", es: "C) Gobierno, diputados o senadores"},
+                    {pt: "D) Somente os juízes", es: "D) Sólo los jueces"}
+                ],
+                correct: 2
+            },
+            {
+                id: 14,
+                questionPt: "O que são as 'Comunidades Autónomas'?",
+                questionEs: "¿Qué son las 'Comunidades Autónomas'?",
+                options: [
+                    {pt: "A) Estados independentes", es: "A) Estados independientes"},
+                    {pt: "B) Regiões com autogoverno", es: "B) Regiones con autogobierno"},
+                    {pt: "C) Municípios especiais", es: "C) Municipios especiales"},
+                    {pt: "D) Províncias administrativas", es: "D) Provincias administrativas"}
+                ],
+                correct: 1
+            },
+            {
+                id: 15,
+                questionPt: "Qual é a função do Senado?",
+                questionEs: "¿Cuál es la función del Senado?",
+                options: [
+                    {pt: "A) Câmara de representação territorial", es: "A) Cámara de representación territorial"},
+                    {pt: "B) Câmara legislativa única", es: "B) Cámara legislativa única"},
+                    {pt: "C) Câmara de revisão judicial", es: "C) Cámara de revisión judicial"},
+                    {pt: "D) Câmara executiva", es: "D) Cámara ejecutiva"}
+                ],
+                correct: 0
+            },
+            {
+                id: 16,
+                questionPt: "Em que ano foi aprovada a atual Constituição Espanhola?",
+                questionEs: "¿En qué año fue aprobada la actual Constitución Española?",
+                options: [
+                    {pt: "A) 1975", es: "A) 1975"},
+                    {pt: "B) 1976", es: "B) 1976"},
+                    {pt: "C) 1978", es: "C) 1978"},
+                    {pt: "D) 1980", es: "D) 1980"}
+                ],
+                correct: 2
+            },
+            {
+                id: 17,
+                questionPt: "Quem foi Francisco Franco?",
+                questionEs: "¿Quién fue Francisco Franco?",
+                options: [
+                    {pt: "A) Presidente democraticamente eleito", es: "A) Presidente democráticamente elegido"},
+                    {pt: "B) Ditador militar (1939-1975)", es: "B) Dictador militar (1939-1975)"},
+                    {pt: "C) Rei da Espanha", es: "C) Rey de España"},
+                    {pt: "D) Líder republicano", es: "D) Líder republicano"}
+                ],
+                correct: 1
+            },
+            {
+                id: 18,
+                questionPt: "Qual destas é uma festa nacional espanhola?",
+                questionEs: "¿Cuál de estas es una fiesta nacional española?",
+                options: [
+                    {pt: "A) Dia de São Patrício", es: "A) Día de San Patricio"},
+                    {pt: "B) Día de la Hispanidad (12 de outubro)", es: "B) Día de la Hispanidad (12 de octubre)"},
+                    {pt: "C) Carnaval nacional", es: "C) Carnaval nacional"},
+                    {pt: "D) Festa da Independência", es: "D) Fiesta de la Independencia"}
+                ],
+                correct: 1
+            },
+            {
+                id: 19,
+                questionPt: "Qual é o idioma co-oficial em algumas comunidades autónomas?",
+                questionEs: "¿Cuál es el idioma cooficial en algunas comunidades autónomas?",
+                options: [
+                    {pt: "A) Inglês", es: "A) Inglés"},
+                    {pt: "B) Catalão, galego e basco (euskera)", es: "B) Catalán, gallego y vasco (euskera)"},
+                    {pt: "C) Francês", es: "C) Francés"},
+                    {pt: "D) Alemão", es: "D) Alemán"}
+                ],
+                correct: 1
+            },
+            {
+                id: 20,
+                questionPt: "O que é a 'Guerra Civil Espanhola'?",
+                questionEs: "¿Qué es la 'Guerra Civil Española'?",
+                options: [
+                    {pt: "A) Conflito com Portugal", es: "A) Conflicto con Portugal"},
+                    {pt: "B) Conflito entre 1936-1939 entre republicanos e nacionalistas", es: "B) Conflicto entre 1936-1939 entre republicanos y nacionalistas"},
+                    {pt: "C) Guerra de independência", es: "C) Guerra de independencia"},
+                    {pt: "D) Conflito com a França", es: "D) Conflicto con Francia"}
+                ],
+                correct: 1
+            },
+            {
+                id: 21,
+                questionPt: "Qual é a moeda oficial da Espanha?",
+                questionEs: "¿Cuál es la moneda oficial de España?",
+                options: [
+                    {pt: "A) Peso", es: "A) Peso"},
+                    {pt: "B) Euro", es: "B) Euro"},
+                    {pt: "C) Dólar", es: "C) Dólar"},
+                    {pt: "D) Libra esterlina", es: "D) Libra esterlina"}
+                ],
+                correct: 1
+            },
+            {
+                id: 22,
+                questionPt: "Quantas províncias tem a Comunidade de Madrid?",
+                questionEs: "¿Cuántas provincias tiene la Comunidad de Madrid?",
+                options: [
+                    {pt: "A) 1", es: "A) 1"},
+                    {pt: "B) 5", es: "B) 5"},
+                    {pt: "C) 10", es: "C) 10"},
+                    {pt: "D) 15", es: "D) 15"}
+                ],
+                correct: 0
+            },
+            {
+                id: 23,
+                questionPt: "O que é o 'Prado'?",
+                questionEs: "¿Qué es el 'Prado'?",
+                options: [
+                    {pt: "A) Um parque em Madrid", es: "A) Un parque en Madrid"},
+                    {pt: "B) Um museu de arte em Madrid", es: "B) Un museo de arte en Madrid"},
+                    {pt: "C) Um estádio de futebol", es: "C) Un estadio de fútbol"},
+                    {pt: "D) Um palácio real", es: "D) Un palacio real"}
+                ],
+                correct: 1
+            },
+            {
+                id: 24,
+                questionPt: "Qual é a festa tradicional de São João mais importante?",
+                questionEs: "¿Cuál es la fiesta tradicional de San Juan más importante?",
+                options: [
+                    {pt: "A) Em Sevilha", es: "A) En Sevilla"},
+                    {pt: "B) Em Barcelona", es: "B) En Barcelona"},
+                    {pt: "C) Em Valência", es: "C) En Valencia"},
+                    {pt: "D) Em Granada", es: "D) En Granada"}
+                ],
+                correct: 1
+            },
+            {
+                id: 25,
+                questionPt: "A Espanha faz parte da União Europeia desde:",
+                questionEs: "¿España forma parte de la Unión Europea desde:",
+                options: [
+                    {pt: "A) 1957", es: "A) 1957"},
+                    {pt: "B) 1975", es: "B) 1975"},
+                    {pt: "C) 1986", es: "C) 1986"},
+                    {pt: "D) 1992", es: "D) 1992"}
+                ],
+                correct: 2
+            }
+        ];
+
+        let timerInterval;
+        let timeLeft = 45 * 60;
+
+        function generateQuestions() {
+            const part1Container = document.getElementById('part1-questions');
+            const part2Container = document.getElementById('part2-questions');
+
+            let part1Html = '';
+            let part2Html = '';
+
+            questions.forEach((q, index) => {
+                const questionHtml = `
+                    <div class="question-box" id="question-${index}">
+                        <span class="question-number">Pregunta ${q.id}</span>
+                        <p class="question-text">${q.questionPt} <span class="spanish-text">${q.questionEs}</span></p>
+                        <div class="options">
+                            ${q.options.map((opt, optIndex) => `
+                                <label class="option-label" for="q${index}_${optIndex}">
+                                    <input type="radio" name="q${index}" id="q${index}_${optIndex}" value="${optIndex}">
+                                    ${opt.pt} <span class="spanish-text">${opt.es}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                if (index < 15) {
+                    part1Html += questionHtml;
+                } else {
+                    part2Html += questionHtml;
+                }
+            });
+
+            part1Container.innerHTML = part1Html;
+            part2Container.innerHTML = part2Html;
+        }
+
+        function startExam() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('questions-container').style.display = 'block';
+            document.getElementById('timer').classList.add('running');
+
+            generateQuestions();
+            startTimer();
+
+            document.getElementById('questions-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert('⏰ ¡TIEMPO AGOTADO! Se enviarán tus respuestas automáticamente.');
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `⏰ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft < 300) {
+                document.getElementById('timer').style.background = '#dc3545';
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+
+            let correct = 0;
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+
+                if (selected) {
+                    const selectedValue = parseInt(selected.value);
+                    const questionBox = document.getElementById(`question-${index}`);
+                    const labels = questionBox.querySelectorAll('.option-label');
+
+                    labels.forEach((label, labelIndex) => {
+                        if (labelIndex === q.correct) {
+                            label.classList.add('correct');
+                        } else if (labelIndex === selectedValue && selectedValue !== q.correct) {
+                            label.classList.add('incorrect');
+                        }
+                    });
+
+                    if (selectedValue === q.correct) {
+                        correct++;
+                    }
+                }
+            });
+
+            const percentage = Math.round((correct / 25) * 100);
+            const isAptado = correct >= 15;
+
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('percentage').textContent = percentage;
+
+            const scoreText = document.getElementById('scoreText');
+            scoreText.textContent = `${correct}/25`;
+            scoreText.className = 'score ' + (isAptado ? 'aptado' : 'no-aptado');
+
+            const resultMessage = document.getElementById('resultMessage');
+            if (isAptado) {
+                resultMessage.innerHTML = '🎉 APTADO! Has aprobado el examen CCSE';
+                resultMessage.className = 'result-message aptado';
+            } else {
+                resultMessage.innerHTML = `❌ NO APTADO - Necesitas ${15 - correct} respuestas correctas más`;
+                resultMessage.className = 'result-message no-aptado';
+            }
+
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartExam() {
+            timeLeft = 45 * 60;
+            document.getElementById('timer').textContent = '⏰ 45:00';
+            document.getElementById('timer').classList.remove('running');
+            document.getElementById('results').classList.remove('show');
+
+            const questionBoxes = document.querySelectorAll('.question-box');
+            questionBoxes.forEach(box => box.remove());
+
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('questions-container').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

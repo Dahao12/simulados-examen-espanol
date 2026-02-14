@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado DELE A2 2026 - EXAMEN INTERACTIVO BILINGÜE</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #f5576c;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .info-box strong {
+            font-size: 18px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            background: #f0f0f0;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: #f5576c;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .question-box {
+            background: #f8f9fa;
+            border-left: 5px solid #f5576c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .question-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            background: #f5576c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .spanish-text {
+            color: #f5576c;
+            margin-left: 10px;
+        }
+
+        .reading-text {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .options {
+            margin: 15px 0;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-label:hover {
+            border-color: #f5576c;
+            background: #fff0f5;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            accent-color: #f5576c;
+        }
+
+        .option-label.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .option-label.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 30px 0;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .results {
+            display: none;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #f5576c;
+            margin: 20px 0;
+        }
+
+        .score.aptado {
+            color: #28a745;
+        }
+
+        .score.no-aptado {
+            color: #dc3545;
+        }
+
+        .result-message {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .aptado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .no-aptado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .restart-btn {
+            background: #f5576c;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .tab {
+                font-size: 12px;
+                padding: 10px 5px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 SIMULADO DELE A2 2026 - BILINGÜE (PT/ES)</h1>
+
+        <div class="info-box">
+            <p><strong>⏱️ 4 PRUEBAS INDEPENDIENTES</strong></p>
+            <p><strong>✅ APROBACIÓN: 15/25 puntos por prueba</strong></p>
+            <p><strong>⚠️ Debes obtener APTO en CADA prueba</strong></p>
+            <p><strong>🌍 PORTUGUÊS + ESPAÑOL (bilingue)</strong></p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('reading')">📖 Lec/Reading</button>
+            <button class="tab" onclick="showTab('listening')">🎧 Aud/Listening</button>
+            <button class="tab" onclick="showTab('writing')">✍️ Escr/Writing</button>
+            <button class="tab" onclick="showTab('speaking')">💬 Oral/Speaking</button>
+        </div>
+
+        <!-- Comprensión de Lectura -->
+        <div id="reading" class="tab-content active">
+            <div class="question-box">
+                <span class="question-number">TAREA 1 - Elige Múltiple</span>
+
+                <div class="reading-text">
+                    <strong>RESTAURANTE "EL RINCÓN DE MADRID" 🇪🇸</strong>
+                    <br>==================================
+                    <br>Horário: Lunes a Domingo 12:00-23:00
+                    <br>Especialidad: Cocina tradicional española
+                    <br><br>
+                    Menú del día: 15€ (incluye entrada, plato principal, postre y bebida)
+                    <br>Menú infantil: 8€ (para niños hasta 12 años)
+                    <br>Carta completa: Disponible de 12:00-18:00 y 20:00-23:00
+                    <br><br>
+                    Aceptamos: Visa, Mastercard, dinero efectivo.
+                    <br>No aceptamos: cheques.
+                </div>
+
+                <p class="question-text">Pergunta 1: O que o restaurante aceita como pagamento? <span class="spanish-text">¿Qué tipo de pago acepta el restaurante?</span></p>
+                <div class="options">
+                    <label class="option-label" for="read1_1">
+                        <input type="radio" name="read1" id="read1_1" value="0">
+                        A) Só dinheiro efectivo / <span class="spanish-text">Sólo dinero efectivo</span>
+                    </label>
+                    <label class="option-label" for="read1_2">
+                        <input type="radio" name="read1" id="read1_2" value="1">
+                        B) Visa, Mastercard e dinheiro / <span class="spanish-text">Visa, Mastercard y dinero efectivo</span>
+                    </label>
+                    <label class="option-label" for="read1_3">
+                        <input type="radio" name="read1" id="read1_3" value="2">
+                        C) Todos os tipos de cartões / <span class="spanish-text">Todos los tipos de tarjetas</span>
+                    </label>
+                    <label class="option-label" for="read1_4">
+                        <input type="radio" name="read1" id="read1_4" value="3">
+                        D) Só cartões de crédito / <span class="spanish-text">Sólo tarjetas de crédito</span>
+                    </label>
+                </div>
+
+                <p class="question-text">Pergunta 2: Quanto custa o cardápio infantil? <span class="spanish-text">¿Cuánto cuesta el menú infantil?</span></p>
+                <div class="options">
+                    <label class="option-label" for="read2_1">
+                        <input type="radio" name="read2" id="read2_1" value="0">
+                        A) 15€
+                    </label>
+                    <label class="option-label" for="read2_2">
+                        <input type="radio" name="read2" id="read2_2" value="1">
+                        B) 12€
+                    </label>
+                    <label class="option-label" for="read2_3">
+                        <input type="radio" name="read2" id="read2_3" value="2">
+                        C) 8€
+                    </label>
+                    <label class="option-label" for="read2_4">
+                        <input type="radio" name="read2" id="read2_4" value="3">
+                        D) Grátis para crianças / <span class="spanish-text">Gratis para niños</span>
+                    </label>
+                </div>
+
+                <p class="question-text">Pergunta 3: Em que horário o cardápio completo está disponível? <span class="spanish-text">¿En qué horario está disponible la carta completa?</span></p>
+                <div class="options">
+                    <label class="option-label" for="read3_1">
+                        <input type="radio" name="read3" id="read3_1" value="0">
+                        A) O dia todo / <span class="spanish-text">Todo el día</span>
+                    </label>
+                    <label class="option-label" for="read3_2">
+                        <input type="radio" name="read3" id="read3_2" value="1">
+                        B) 12:00-18:00 e 20:00-23:00
+                    </label>
+                    <label class="option-label" for="read3_3">
+                        <input type="radio" name="read3" id="read3_3" value="2">
+                        C) 20:00-23:00
+                    </label>
+                    <label class="option-label" for="read3_4">
+                        <input type="radio" name="read3" id="read3_4" value="3">
+                        D) 12:00-18:00
+                    </label>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="showResults('reading')">✅ COMPROBAR RESULTADOS Lectura</button>
+            <div class="results" id="results-reading"></div>
+        </div>
+
+        <!-- Comprensión Auditiva -->
+        <div id="listening" class="tab-content">
+            <div class="question-box">
+                <span class="question-number">TAREA 1 - Anuncios de Radio (simulado)</span>
+
+                <div class="reading-text">
+                    <strong>⚠️ NO EXAMEN REAL, OYIRÁS GRABACIONES DE AUDIO</strong>
+                    <br><strong>⚠️ NA PROVA REAL, VOCÊ OUVIRÁ GRAVAÇÕES DE ÁUDIO</strong>
+                    <br><br>
+                    <strong>TRANSCRIPCIÓN / TRANSCRIÇÃO:</strong><br>
+                    "¡Buenos días! A loja 'El Corte Inglés' tem uma oferta especial esta semana: ropa femenina com 50% de descuento. Oferta válida de lunes a viernes, de 9h a 20h, para las primeras 50 clientes del día. ¡No pierdan esta oportunidad!"
+                </div>
+
+                <p class="question-text">Pergunta 1: Qual é a oferta da loja? <span class="spanish-text">¿Cuál es la oferta de la tienda?</span></p>
+                <div class="options">
+                    <label class="option-label" for="listen1_1">
+                        <input type="radio" name="listen1" id="listen1_1" value="0">
+                        A) Ropa masculina con descuento del 30% / <span class="spanish-text">Roupas masculinas com desconto de 30%</span>
+                    </label>
+                    <label class="option-label" for="listen1_2">
+                        <input type="radio" name="listen1" id="listen1_2" value="1">
+                        B) Ropa femenina con 50% de descuento / <span class="spanish-text">Roupas femininas com 50%</span>
+                    </label>
+                    <label class="option-label" for="listen1_3">
+                        <input type="radio" name="listen1" id="listen1_3" value="2">
+                        C) Ropa para niños gratis / <span class="spanish-text">Roupas para crianças grátis</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="showResults('listening')">✅ COMPROBAR RESULTADOS Audición</button>
+            <div class="results" id="results-listening"></div>
+        </div>
+
+        <!-- Expresión Escrita -->
+        <div id="writing" class="tab-content">
+            <div class="question-box">
+                <span class="question-number">TAREA 1 - Correo Electrónico</span>
+
+                <p class="question-text">Escribe un email a tu amigo español Juan (80-100 palabras): <span class="spanish-text">Escreva um email ao seu amigo João em espanhol (80-100 palavras)</span></p>
+                <p class="question-text" style="font-size: 16px;">Contéale sobre tu fin de semana. ¿A dónde fuiste? ¿Con quién? ¿Qué hiciste? ¿Te gustó? <span class="spanish-text">Conte-lhe sobre o seu fim de semana. Onde foi? Com quem? O que fez? Gostou?</span></p>
+                <textarea placeholder="Escribe tu email aquí..." style="width:100%; height:150px; padding:10px; border:2px solid #ddd; border-radius:8px;"></textarea>
+            </div>
+
+            <div class="results" id="results-writing">
+                <h3>📝 CRITERIOS DE EVALUACIÓN</h3>
+                <p>No exame real, sua tarefa será avaliada por examinadores do Instituto Cervantes baseando-se em:</p>
+                <ul style="margin: 15px 0 15px 20px;">
+                    <li><strong>Contenido:</strong> resposta completa à tarefa</li>
+                    <li><strong>Coesão e Coerência:</strong> organização do texto</li>
+                    <li><strong>Vocabulário:</strong> adequado ao nível A2</li>
+                    <li><strong>Gramática:</strong> correta (ser/estar, tempos verbais)</li>
+                    <li><strong>Ortografia:</strong> correta</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Expresión Oral -->
+        <div id="speaking" class="tab-content">
+            <div class="question-box">
+                <span class="question-number">TAREA 1 - Monólogo</span>
+
+                <p class="question-text">Tema: "Mi vacaciones de verano" <span class="spanish-text">Tema: "Minhas férias de verão"</span></p>
+                <p class="question-text" style="font-size: 16px;">Habla 3-4 minutos sobre: ¿Dónde fuiste? ¿Cuándo? ¿Con quién? ¿Qué hiciste? ¿Qué te gustó más? <span class="spanish-text">Fale 3-4 minutos sobre: Onde foi? Quando? Com quem? O que fez? O que mais gostou?</span></p>
+            </div>
+
+            <div class="results" id="results-speaking">
+                <h3>💬 CRITERIOS DE EVALUACIÓN</h3>
+                <p>No exame real, sua tarefa será avaliada por examinadores do Instituto Cervantes baseando-se em:</p>
+                <ul style="margin: 15px 0 15px 20px;">
+                    <li><strong>Expressão e Coerência:</strong> fluidez, organização</li>
+                    <li><strong>Recursos Linguísticos:</strong> vocabulário adequado</li>
+                    <li><strong>Gramática:</strong> correta (ser/estar, tempos verbais)</li>
+                    <li><strong>Interação:</strong> naturalidade no diálogo</li>
+                    <li><strong>Pronúncia:</strong> compreensível</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const readingAnswers = {
+            read1: 1, read2: 2, read3: 1
+        };
+
+        const listeningAnswers = {
+            listen1: 1
+        };
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showResults(type) {
+            let correct = 0;
+            let total = 0;
+
+            if (type === 'reading') {
+                total = Object.keys(readingAnswers).length;
+                for (let [question, correctAnswer] of Object.entries(readingAnswers)) {
+                    const selected = document.querySelector(`input[name="${question}"]:checked`);
+                    if (selected) {
+                        const questionBox = selected.closest('.question-box') || selected.closest('.options');
+                        const labels = questionBox.querySelectorAll(`input[name="${question}"]`);
+
+                        labels.forEach(label => {
+                            const parent = label.closest('.option-label');
+                            const value = parseInt(label.value);
+                            if (value === correctAnswer) {
+                                parent.classList.add('correct');
+                            } else if (value === parseInt(selected.value) && value !== correctAnswer) {
+                                parent.classList.add('incorrect');
+                            }
+                        });
+
+                        if (parseInt(selected.value) === correctAnswer) {
+                            correct++;
+                        }
+                    }
+                }
+            } else if (type === 'listening') {
+                total = Object.keys(listeningAnswers).length;
+                for (let [question, correctAnswer] of Object.entries(listeningAnswers)) {
+                    const selected = document.querySelector(`input[name="${question}"]:checked`);
+                    if (selected) {
+                        const questionBox = selected.closest('.question-box');
+                        const labels = questionBox.querySelectorAll(`input[name="${question}"]`);
+
+                        labels.forEach(label => {
+                            const parent = label.closest('.option-label');
+                            const value = parseInt(label.value);
+                            if (value === correctAnswer) {
+                                parent.classList.add('correct');
+                            } else if (value === parseInt(selected.value) && value !== correctAnswer) {
+                                parent.classList.add('incorrect');
+                            }
+                        });
+
+                        if (parseInt(selected.value) === correctAnswer) {
+                            correct++;
+                        }
+                    }
+                }
+            }
+
+            const percentage = Math.round((correct / total) * 100);
+            const isAptado = correct >= Math.ceil(total * 0.6);
+
+            let html = `
+                <h2>📊 RESULTADO / RESULTADO</h2>
+                <p style="font-size: 24px; text-align: center; margin: 20px 0;">
+                    <strong>${correct}/${total}</strong> (${percentage}%)
+                </p>
+                <p class="${isAptado ? 'aptado' : 'no-aptado'}" style="text-align: center; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                    ${isAptado ? '✅ APTADO / APROVADO' : '❌ NO APTADO - Necesitas ' + (Math.ceil(total * 0.6) - correct) + ' respostas correctas más'}
+                </p>
+            `;
+
+            document.getElementById('results-' + type).innerHTML = html;
+            document.getElementById('results-' + type).classList.add('show');
+        }
+    </script>
+</body>
+</html>
